@@ -27,24 +27,21 @@ def flatten(a):
     return r
 
 def network(u):
-    if not u in watching:
-        watching[u] = set()
     return set(flatten(list(watchers[r]) for r in watching[u]))
 
 def score(r, net):
-    return 1.0 * len(watchers[r].intersection(net)) / len(net)
+    return 1.0 * len(watchers[r] & net) / len(net)
 
 start = time.time()
 results = open("results.txt", "w")
 i = 0
 for u in users:
     print i
+    if u not in watching:
+        watching[u] = set()
     net = network(u)
     print "  net:", len(net)
-    inter = set()
-    for w in (watching[x] for x in net):
-        inter.update(w)
-    inter.difference_update(watching[u])
+    inter = set(flatten(list(watching[x]) for x in net)) - watching[u]
     print "  inter:", len(inter)
     best = sorted([x for x in [(score(r, net), r) for r in inter] if x[0] > 0], reverse=True)
     print "  best:", len(best)
