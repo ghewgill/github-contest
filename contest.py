@@ -34,6 +34,7 @@ def score(r, net):
 
 start = time.time()
 results = open("results.txt", "w")
+popular = sorted([(len(watchers[r]), r) for r in repos], reverse=True)
 i = 0
 for u in users:
     print i
@@ -46,7 +47,7 @@ for u in users:
     best = sorted([x for x in [(score(r, net), r) for r in inter] if x[0] > 0], reverse=True)
     print "  best:", len(best)
     if len(best) == 0:
-        best = [(0, 17)]
+        best = popular
     print >>results, "%d:%s" % (u, ",".join(str(x[1]) for x in best[:10]))
     i += 1
     print "eta:", time.ctime(start + (time.time() - start) * len(users) / i)
