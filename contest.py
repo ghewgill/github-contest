@@ -35,7 +35,9 @@ def network(u):
     return set(flatten(list(watchers[r]) for r in watching[u]))
 
 def score(u, r, net):
-    return avg([1.0 * len(watching[x] & watching[u]) / len(watching[u]) for x in watchers[r]])
+    #return 1.0 * len(watchers[r] & net) / len(net)
+    #return avg([1.0 * len(watching[x] & watching[u]) / len(watching[u]) for x in watchers[r]])
+    return len(watchers[r])
 
 start = time.time()
 results = open("results.txt", "w")
