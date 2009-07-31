@@ -35,6 +35,7 @@ def network(u):
     return set(flatten(list(watchers[r]) for r in watching[u]))
 
 def score(u, r, net):
+    pass
     return len(watchers[r] & net)
 
 start = time.time()
