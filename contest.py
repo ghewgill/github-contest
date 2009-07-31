@@ -35,9 +35,7 @@ def network(u):
     return set(flatten(list(watchers[r]) for r in watching[u]))
 
 def score(u, r, net):
-    #return 1.0 * len(watchers[r] & net) / len(net)
-    #return avg([1.0 * len(watching[x] & watching[u]) / len(watching[u]) for x in watchers[r]])
-    return len(watchers[r])
+    return len(watchers[r] & net)
 
 start = time.time()
 results = open("results.txt", "w")
@@ -51,8 +49,7 @@ for u in users:
     print "  net:", len(net)
     inter = set(flatten(list(watching[x]) for x in net)) - watching[u]
     print "  inter:", len(inter)
-    #best = sorted([x for x in [(score(u, r, net), r) for r in inter] if x[0] > 0], reverse=True)
-    best = [(0, x) for x in sorted(list(inter), key=lambda x: len(watchers[x]), reverse=True)]
+    best = sorted([x for x in [(score(u, r, net), r) for r in inter] if x[0] > 0], reverse=True)
     print "  best:", len(best)
     if len(best) == 0:
         best = popular
