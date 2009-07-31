@@ -31,6 +31,13 @@ def flatten(a):
             r.append(x)
     return r
 
+def top(n, a):
+    r = []
+    for x in a:
+        if len(r) == 0 or x > r[-1]:
+            r = sorted(r + [x], reverse=True)[:n]
+    return r
+
 def network(u):
     return set(flatten(list(watchers[r]) for r in watching[u]))
 
@@ -47,13 +54,13 @@ for u in users:
         watching[u] = set()
     net = network(u)
     print "  net:", len(net)
-    inter = set(flatten(list(watching[x]) for x in net)) - watching[u]
+    inter = repos - watching[u]
     print "  inter:", len(inter)
-    best = sorted([x for x in [(score(u, r, net), r) for r in inter] if x[0] > 0], reverse=True)
-    print "  best:", len(best)
+    best = top(10, ((score(u, r, net), r) for r in repos - watching[u]))
+    print "  best:", best
     if len(best) == 0:
         best = popular
-    print >>results, "%d:%s" % (u, ",".join(str(x[1]) for x in best[:10]))
+    print >>results, "%d:%s" % (u, ",".join(str(x[1]) for x in best))
     i += 1
     print "eta:", time.ctime(start + (time.time() - start) * len(users) / i)
 results.close()
