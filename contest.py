@@ -46,7 +46,7 @@ def score(u, r, net):
 
 start = time.time()
 results = open("results.txt", "w")
-popular = sorted([(len(watchers[r]), r) for r in repos], reverse=True)
+popular = top(10, ((len(watchers[r]), r) for r in repos))
 i = 0
 for u in users:
     print i
@@ -54,12 +54,11 @@ for u in users:
         watching[u] = set()
     net = network(u)
     print "  net:", len(net)
-    inter = repos - watching[u]
+    inter = set(flatten(list(watching[x]) for x in net)) - watching[u]
     print "  inter:", len(inter)
-    best = top(10, ((score(u, r, net), r) for r in repos - watching[u]))
+    best = top(10, ((score(u, r, net), r) for r in inter - watching[u]))
     print "  best:", best
-    if len(best) == 0:
-        best = popular
+    best.extend(popular[:10-len(best)])
     print >>results, "%d:%s" % (u, ",".join(str(x[1]) for x in best))
     i += 1
     print "eta:", time.ctime(start + (time.time() - start) * len(users) / i)
