@@ -37,6 +37,7 @@ def network(u):
 def score(u, r, net):
     return len(watchers[r] & net)
 
+
 start = time.time()
 results = open("results.txt", "w")
 popular = sorted([(len(watchers[r]), r) for r in repos], reverse=True)
