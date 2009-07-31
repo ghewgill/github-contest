@@ -51,7 +51,8 @@ for u in users:
     print "  net:", len(net)
     inter = set(flatten(list(watching[x]) for x in net)) - watching[u]
     print "  inter:", len(inter)
-    best = sorted([x for x in [(score(u, r, net), r) for r in inter] if x[0] > 0], reverse=True)
+    #best = sorted([x for x in [(score(u, r, net), r) for r in inter] if x[0] > 0], reverse=True)
+    best = [(0, x) for x in sorted(list(inter), key=lambda x: len(watchers[x]), reverse=True)]
     print "  best:", len(best)
     if len(best) == 0:
         best = popular
